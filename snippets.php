@@ -314,17 +314,24 @@ middlware("can('update',project)");						//in web.php
 @can('update', $project)  /*codes*/ @endcan				//in view
 return $project->user_id == $user->id;					//in Policy
 
-//define Gate in AuthServiceProvider in boot method
-Gate::define('update-post',function($user,$post=null){
+//-----------------------------------Gate-------------------------------
+//define a method in User class
+public function canUpdatePost(){
+	if($user->id == 1){return true;} //for admin
 	return $post->user_id == $user->id;
+}
+//define Gate in AuthServiceProvider in boot method
+Gate::define('update-post',function($user,$model = null){
+	return $user->canUpdatePost();
 })
 
 //use Gate in Controller
-$post = Post::where('user_id',1)->first();
-if(Gate::allows('update-post',$post)){//codes}
-if(auth()->user()->can('update-post',$post)){//codes}
-if($this->authorize('update-post',$post)){//codes}
+if(Gate::allows('update-post',Post::class)){//codes}
+if(auth()->user()->can('update-post',Post::class)){//codes}
+if($this->authorize('update-post',Post::class)){//codes}
 
+//in view
+@can('update-post') ... @else ... @endcan
 //=====================================js===========================================
 laravel ecommerce lesson #77 in minute 15 has a good example for using functions
 if($('#paypal').is(':checked')){ alert('do something');}

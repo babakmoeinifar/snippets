@@ -370,3 +370,155 @@ git checkout v0.2
 
 //=====================================linux=========================================
 ctrl+f1		go to console when gdm not working
+ctrl+r      search in terminal
+sudo systemctl disable docker.socket
+dmesg 		show log from init system
+lsmod 	rmmod 	modprob 	- lspci 	lsusb 	lshw 	lshal 
+ls | less 		ls | grep felan
+pstree | less 		-		pstree | head 		-		pstree | tail   (bottom)
+tail /var/log/syslog 		(آخرین اتفاقاتی که تو سیستم افتاده)
+//for system monitoring on any file or log file
+tail -f /var/log/syslog 		(آخرین اتفاقاتی که تو سیستم افتاده و باز میمونه و اتفاقات جدید مثل پلاگ شدن رو نشون میده)
+whereis		-		ldd felanApp (see libraries that using)
+jcal 					taghvim
+man commandName 		(press h in manual)
+tree dirName
+
+ln fromFile.txt toFile.txt 			(hardlink-same inode)
+unlink hardLinkFile.txt 			(removes linked file)
+ln -s newFile.txt softlink.txt 		(**softlink-different inode) (softlink.txt -> newFile.txt)
+which subl 	- 	ls -ltrh outputOfWhich 		
+
+//------------------------bash-----------------------------
+echo -e "hello\n"		
+ls; echo done; 			(two seperate command in one line) 
+ls && echo done 		(two command in one line that must execute all if one not run others wont run) echo $?
+ls || echo done			(two command or)
+echo done || ls; echo or
+exec ls 						(run ls after that close shell)
+MYMOOD=happy 					(define local variable)
+export MYMOOD=happy 			(define global variable)
+unset MYMOOD
+history
+!! 						(runs last command)
+history | grep sudo
+!?MYMOOD? 				(runs last command that has MYMOOD)
+echo $PATH
+PATH=$PATH:/home/babak/bin 		(add environment path)
+vi .bashrc export PATH="$PATH:/home/babak/bin/"                     (add permanet environment path)
+echo $PATH - export PATH=copy from echo $PATH and change it 		(edit environment path)
+
+//------------------------streams----------------------------
+ls -1 | sort 	----	ls -1 | sort -r   ----	sort file
+sort -n file    					(sort in numeric)
+sort file | uniq -c{for count} -u{doesnt show doubled word} -d{just shows doubled word}	 	(remove same words and shows just one of theme) 	{sort is nessessary in this command}
+ls > newFile 	(خروجی را بریز به فابل) (redirect datas to newFile)
+ls x* m* > outputFile 2> errorFile or &> &>> (خروجی استاندارد را بریز به outputFile و خروجی ارور را بریز به errorFile)
+ls a* >> outputFile 			(محتویات فایل را حذف نکن فقط خروجی جدید را تهش اضافه کن)
+ls a* x* 1> outputFile 2>&1 	خروجی ارور را بریز همونجا که خروجی استاندارد رو میریزی
+ls a* x* > /dev/null 2> errorFile 	خروجی استاندارد را بریز تو هیچجا و نمایش نده
+cat -n myFile        or         nl myFile 		(شماره گذاری خطوط خروجی)
+cut -f1 d, 		(cut filed 1 seperator is ,)
+paste 		join
+cat file | tr ' ' '-' > newFile 	(translate from ' ' to '-') 	- {tr cant run alone}
+cat file | tr '\t' ' ' | tr ' ' '-'
+//regex
+grep -v a friends  بگرد تو فایل دوستان دنبال غیر از a ها  (v is reverse)
+egrep "^[a-h].*a$" friends 	شروع میشه با از a تا h هرچندتا و آخرش هم a باشه
+tr ' ' ',' < newFile 	تمام فاصله هارو به کاما تبدیل کن ، ورودی از فایل newFile
+sed 's/A/B' file 		(subtitude from 'A' to 'B' first word s is subtitude)   				- {sed can run alone}
+sed 's/A/B/g' file 		(subtitude from 'A' to 'B' in all words - g is global)   				- {sed can run alone}
+sed 's/you/shoma' file
+{regex can use in sed command like} sed -r "s/^a/b/"
+
+//------------------------file management-----------------------
+ls -1 	{shows list 1 line 1 line} 		-	ls -R (Recursive) 	- rm -R myDir 	-  ls *jpg 
+ls -ltrhi 	{shows list long and (h)human readable and (t)sort in time created and (r)reverse time and (i) inode}
+cp source destination 		- 	mv file1 file2 file3 dir 	(multiple move-last one is destination)
+mv myFile newFile 		(rename directory)
+cp -f (f is overwrite-f is default in user mode) 	-i (interactive ask Y/N question for delete and overwrite)
+cp -b (will copy and makes backup of file) 			-p (preserve the attributes-keeps attributes)
+mkdir 	rmdir 	- 	mkdir -p dir1/dir2 	(makes child and Parent dirs)
+rm * -i 	(remove all files here interactive)
+cp * newFolder 	(copy all to newFolder) 	-  	rm newFolder/* 		(remove everything in newFolder)*/
+ls f? 	(f and one character) 	- ls f?? 	(فایل سه حرفی که با f شروع میشه)
+ls [a-z]* 	(matches all a,..,z) 	- ls [0-9a-zA-Z]* 	- ls [!x]* 	(not x) 	- ls ?[1e]* 
+lsof 	(ls open files)
+cp ???.* /tmp
+//-----------------------------Search----------------------------
+find . 	(find all in this dir) 		- find . -name "f*" 	- find . -iname "*f*"  (i is case insensitive)
+find . -iname "???"  (all files in three characters)
+find /babak -type d -iname "b*" 	(find just (d) for directories - (f) for files - (l) link)
+find /babak -size -20M  or +2G 	or 	+100KB 	or 	 0 	 or   50MB  -	-size 0 == -empty
+find . -atime -6 	or  -ctime 		or 		-mtime 	 (in days)	or -amin -cmin -mmin
+find . -cmin -30 -exec cp -R "{}" backup/ \; نتیجه جستجو رو کپی کن به دارکتوری بک آپ
+find . -name "a*" - type f | xargs rm 	خروجی جستجو رو به بده به xarg تا پاکش کنه
+locate fileName 		(full text search in linux-veryyyyy faster than find)
+sudo updatedb 			(updates db of locate) - conf is in /etc/updatedb.conf
+
+ls | xargs echo filam ina hastan 		اول دستور جلوی xargs رو مینویسه بعد خروجی دستور اول رو جلوش انجام میده
+ls | tee myFile 	خروجی ls رو میریزه تو myFile و همزمان نمایش میده چکار کرده
+file -i flan 	(shows type of file)(i for mime format)
+gzip myFile 	- 	gunzip myFile.gz
+tar -cf myArchive.tar * 		(cf is create file - tar just collapse all files to one file[archive])
+tar -cfz myArchive.tar.gz * 	(z for gzip)
+tar -xf myArchive.tar.gz 		(extract- opens file)
+tar -xfv myArchive.tar.gz 		(v for verbose! - show operaions in working)
+tar -rf myArchive.tar newFile 	(appends newFile to tar archive)
+sudo dd if=ubuntu.iso of=/dev/sdb/ bs=4096 		(advanced copy- if=input file - of=outputfile - bs=blocksize)
+sudo dd if=/dev/sda1 of=backupsda1.dd bs=4096 	(backup of system)
+sudo dd of=/dev/sda1 if=backupsda1.dd bs=4096 	(recover backup system) - 4096 fast is for cd dvd - bs=100M or 1G
+ftp weecode.ir << END 	وصل شو به سرور ورودی بگیر در خطوط بعد تا زمانی که END تایپ شد تمام
+
+//----------------------------process-----------------------------
+& بعد هردستور اونو تو بک گراند ران میکنه و با دستور jobs قابل دیدنه
+jobs -l   (l is long - returns pid)
+bg پروسس فریز شده با ctrl+z را دوباره ران میکند 	bg %2
+fg %2 پروسس شماره دو را به فورگراند میاره
+kill %1		(normall close with save)		-	kill -9 16028<pid> 	  (force close)
+killall sleep     هرچی دستور اسمش اسلیپ هست رو ببند
+nohup اول دستور بذاریم اون دستور رو در هر صورتی حتی خروج ما اجرا میکنه
+nohup script.sh > mynohup.out 2>&1 & 		-	cat mynohup.out
+ps -ef 	دیدن همه پروسس ها + ppid 		-	ps aux | head 			دیدن همه پروسس ها 	- ps -l
+ps -C xeyes --sort +comm,-sid -o user,pid,time,comm 	(C is search for)(o is Output columns)
+free -m or -g (shows free ram in mb or gb)
+
+//-------------------------------vi----------------------------------
+i  insert mode 		-press Esc then -> u undo in command mode
+replace a word in command mode on a word -> c then w
+delete a word in command mode on a word  -> d then w
+/ search forward 	- ? search backward
+:q 	-:q!  !یعنی مطمعنم دارم چکار میکنم 	-:w! 
+:w (write file) 	-:w myFile.txt (write to new file) 
+:e! if you fucked file it reloads file from disk and refresh it
+:! (runs shell commands) --like--> :!ls
+ZZ (Exit and save if  modified- without : - its faster than :wq if large file not modified)
+:help copy    -  :help save 
+
+x cut
+dd Delete Line
+p paste last deleted text after cursor	-	P before
+
+//-----------------------------Partiotions----------------------------
+sudo fdisk -l /dev/sda
+sudo fdisk  /dev/sda
+sudo gdisk /dev/sda 	(modern command) (GPT disks) (in gdisk you can change partition name)
+
+sudo mkfs -t ext4 -L driveName /dev/sda2 	(make file system == format) 	- sudo mkfs.ext4 /dev/sda2
+ls /sbin/mk* 	(shows all mkfs commands)
+mkswap /dev/sda3
+blkid /dev/sda1		(returns UUID of disk)
+
+mount /dev/sda1 /media/babak	- mount -o ro /dev/sda1 /media/babak 	(o is output - ro is readonly - rw)
+umount /media/babak   or    umount /dev/sda1		- mount  (shows all mounted disks)
+swapon -a 		- 	swapoff   - swapon -s
+
+//-----------------------------system health---------------------------
+cat /etc/fstab   (Bootup file)
+sudo blkid
+fsck /dev/sdb1 		- fsck UUID="" 			(file system check)
+sudo tune2fs -l /dev/sda1
+df -TH 				(disk free remains) (H or h human) (T for disk type)
+du /Desktop -hc 	(disk usage) (c for total) (-s for just summary)
+sudo debugfs /dev/sdb1
+//---------------------------------------------------------------------

@@ -375,6 +375,7 @@ GRANT ALL on dbName TO 'userName'@'localhost';
 //first remove db name line compelete from .env file
 //ست کردن دیتابیس پروژه از مای اسکیول که این دیتابیس ساخته شده و با این دستور تخصیص میده
 set -x DB_DATABASE db_irenkala
+mysql -u babak -pPASSWORD dbName < /home/babak/file.sql 		/*import db.sql file to db*/ 
 
 //=====================================linux=========================================
 middle click after select command in bash will copy paste into new command
@@ -676,6 +677,19 @@ netstat -na | head  یا  grep ":80" 					/*shows which ports are listening and 
 traceroute google.com 				->				tracepath google.com
 dig google.com 										netcat  or  nc 				/*cat command for network*/
 
+lsof -P -n -i :80 -i :443 | grep LISTEN 			/*nginx troubleshouting - lsof is list open files*/
+netstat -plan | grep nginx 				 			/*nginx troubleshouting*/
+tail -f /var/logs/nginx/*.log                       */
+systemctl status nginx mysql php7.2-fpm | grep -E "(Loaded|Active)"
+way 1: 	sudo htpasswd -c /etc/nginx/.htpasswd admin
+way 2:
+{sudo htpasswd -c /etc/nginx/passwords admin 				/*create password with apache2-utils*/
+chown www-data /etc/nginx/passwords
+chmod 600 /etc/nginx/passwords
+htpasswd /etc/nginx/passwords user1 				/*add user or edit user password*/
+htpasswd -D /etc/nginx/passwords user1 				/*delete user password*/
+/*in main location ~\.php$ configuration nginx ->*/ auth_basic "Authentication is required..."; 	auth_basic_user_file /etc/nginx/passwords;
+}
 //---------------------------------Security Administration-------------------------------
 find / -perm -u+s /*find files that their permision is SUID for apps*/
 /*باراول که سیستمی تحویل میگیریم خروجی این دستور رو تو فایل ذخیره میکنیم برای مقایسه بعدا*/

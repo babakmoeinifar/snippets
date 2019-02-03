@@ -701,6 +701,7 @@ htpasswd /etc/nginx/passwords user1 				/*add user or edit user password*/
 htpasswd -D /etc/nginx/passwords user1 				/*delete user password*/
 /*in main location ~\.php$ configuration nginx ->*/ auth_basic "Authentication is required..."; 	auth_basic_user_file /etc/nginx/passwords;
 }
+echo nameserver 8.8.8.8 > /etc/resolv.conf
 //---------------------------------Security Administration-------------------------------
 find / -perm -u+s /*find files that their permision is SUID for apps*/
 /*باراول که سیستمی تحویل میگیریم خروجی این دستور رو تو فایل ذخیره میکنیم برای مقایسه بعدا*/

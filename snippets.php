@@ -1,4 +1,5 @@
 <?
+shift+tab   /*decrease tab indentation*/
 
 php artisan cache:clear php artisan config:clear composer dump-autoload
 
@@ -14,6 +15,11 @@ php artisan migrate:rollback --step=3
 php artisan tinker
 //Then
 Schema::drop('books')
+
+foreach ($variable as $key => $value) {}
+
+//for testing in Handler.php
+    if (app()->environment() === 'testing') throw $exception;
 
 //=====================================validate===========================================
 $this->validate($request,[
@@ -341,11 +347,16 @@ laravel ecommerce lesson #77 in minute 15 has a good example for using functions
 if($('#paypal').is(':checked')){ alert('do something');}
 
 
+//=====================================php==============================================
+phpdismod xdebug 		/*disable extention*/
+phpenmod xdebug 		/*enable extention*/
+
 //=====================================phpstorm=========================================
 alt+up or alt+down 	move to methods
 alt+j 		 select same words
 alt+ctl+o    remove not used classes from header file
 alt+ctrl+m   extract method
+alt+ctrl+shift  for multiple copy
 
 //=====================================git=========================================
 git tag -a v0.1 -m "aaaaa"
@@ -723,3 +734,29 @@ gpg --gen-key        		gpg --export babak > babak_public_key.pub 	/*to share our
 gpg --output revoke.asc --gen-revoke babak  		/*recover private gpg key if it lost*/
 gpg -clearsign fileName 							/*sign a file*/
 gpg --verify fileName 								/*check in other system that signature is OK or not*/ 
+
+//=========================================ES6================================================
+arr =[1,2]; 	arr.map(item => item * 2); 	arr=[2,4];						/*ES6 for loop*/
+
+function(e){console.log(e.target.value);}
+
+//=========================================VUE================================================
+v-text		v-html		v-show		v-if		v-else		v-elseif		v-for="item in datas"
+v-on == @		v-bind == :		v-model		v-cloak		v-pre != v-once
+
+//=========================================React================================================
+<ul>{this.state.users.map(user => <li key={user}> {user} </li>)}</ul>		/*using iterator in react*/
+let newState = {...this.state};												/*copy state to newState*/
+{this.state.user.length === 0 && "User not found!"}							/*if in JSX - last true condition will run*/
+someVar.filter(item => item > 2);
+
+//-----------Redux----------
+	//1.Create store
+		//a-initial state
+		//b-create reducer
+		//c-create store
+	//3.listen to store
+	//2.dispatch actions
+
+//=========================================CSS==================================================
+.parent{position:relative}	.child{display:block;	position:absolute;	right:3px;	top:3px;}		/*positioning free*/

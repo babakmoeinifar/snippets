@@ -527,8 +527,11 @@ ZZ (Exit and save if  modified- without : - its faster than :wq if large file no
 :help copy    -  :help save 
 
 x  /*cut*/
-dd /*Delete Line*/
+dd /*Delete Line*/		-	c i ( /*change in words in ()*/
 p  /*paste last deleted text after cursor*/	-	P /*before*/
+u /*undo*/		-	w /*move to next word*/		-	b /*move backward word*/
+f /*find*/ ( /*first ( in current line*/
+v /*visual mode for selecting by mouse or arrows*/	-	d /*delete selected by v or V*/
 
 //-----------------------------Partitions----------------------------
 sudo fdisk -l /dev/sda
@@ -736,14 +739,33 @@ gpg --output revoke.asc --gen-revoke babak  		/*recover private gpg key if it lo
 gpg -clearsign fileName 							/*sign a file*/
 gpg --verify fileName 								/*check in other system that signature is OK or not*/ 
 
+//=========================================JS================================================
+/*regex for farsi*/
+let pattern = /^ا-ی/;
+let name = prompt('enter name:');
+if(!pattern.test(name)){alert('is valid');}
+else{alert('InValid!');}
+
+/*windows size*/		alert(windows.innerWidth)
+/*event value*/ 		function(e){console.log(e.target.value);}
+
 //=========================================ES6================================================
 arr =[1,2]; 	arr.map(item => item * 2); 	arr=[2,4];						/*ES6 for loop*/
+()=>{}
+logs(){ this.tasks.forEach((task) => console.log(task)); }
+let sum = (...numbers) => numbers.reduce( (prev,current) => prev + current );	/*rest operator*/
 
-function(e){console.log(e.target.value);}
 
 //=========================================VUE================================================
 v-text		v-html		v-show		v-if		v-else		v-elseif		v-for="item in datas"
 v-on == @		v-bind == :		v-model		v-cloak		v-pre != v-once
+//-----remove from list for loop ---------------------
+<li v-for="(data, index) in skills" :key="index">
+	{{data.skill}}
+	<i class="fa fa-trash" @click="remove(index)"></i>
+</li>
+remove(id){ this.skills.splice(id,1); }
+//----------------------------------------------------	
 
 //=========================================React================================================
 <ul>{this.state.users.map(user => <li key={user}> {user} </li>)}</ul>		/*using iterator in react*/

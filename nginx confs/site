@@ -1,0 +1,57 @@
+# ---------------- STAGING ----------------
+server {
+    listen 80 default_server;
+    server_name staging.bshomar.com www.staging.bshomar.com;
+
+    access_log /var/log/nginx/bshomar.staging.access.log;
+    error_log /var/log/nginx/bshomar.staging.error.log;
+
+    location /_next/ {
+        alias /var/www/bshomar/dev/site/.next/;
+        expires 30d;
+        access_log on;
+    }
+
+    location / {
+        # reverse proxy for next server
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        
+        # we need to remove this 404 handling
+        # because next's _next folder and own handling
+        # try_files $uri $uri/ =404;
+    }
+}
+
+# ---------------- PRODUCTION ----------------
+# server {
+#     listen 80 default_server;
+#     server_name bshomar.com www.bshomar.com;
+
+    # access_log /var/log/nginx/bshomar.access.log;
+    # error_log /var/log/nginx/bshomar.error.log;
+
+#     location /_next/ {
+#         alias /var/www/bshomar/prod/site/.next/;
+#         expires 30d;
+#         access_log on;
+#     }
+
+#     location / {
+#         # reverse proxy for next server
+#         proxy_pass http://localhost:3000;
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection 'upgrade';
+#         proxy_set_header Host $host;
+#         proxy_cache_bypass $http_upgrade;
+        
+#         # we need to remove this 404 handling
+#         # because next's _next folder and own handling
+#         # try_files $uri $uri/ =404;
+#     }
+# }

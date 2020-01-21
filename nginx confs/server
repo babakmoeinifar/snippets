@@ -1,0 +1,95 @@
+#-------------------- DEVELOPEMENT -------------------
+server {
+    if ($host = dev.dashmin.bshomar.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+        listen 80;
+        listen [::]:80;
+        server_name dev.dashmin.bshomar.com www.dev.dashmin.bshomar.com;
+}
+
+server {
+
+        auth_basic "admin";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        server_name dev.dashmin.bshomar.com www.dev.dashmin.bshomar.com;
+
+        client_max_body_size 30m;
+
+        root /var/www/bshomar/dev/server/public;
+        index index.php index.html;
+
+        access_log /var/log/nginx/bshomar.dev.dashmin.access.log;
+        error_log /var/log/nginx/bshomar.dev.dashmin.error.log;
+
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+      		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+      		fastcgi_intercept_errors on;
+        }
+
+        location ~ /\.ht {
+                deny all;
+        }
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/dev.dashmin.bshomar.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/dev.dashmin.bshomar.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+#-------------------- PRODUCTION -------------------
+# server {
+#     if ($host = dashmin.bshomar.com) {
+#         return 301 https://$host$request_uri;
+#     } # managed by Certbot
+
+#         listen 80;
+#         listen [::]:80;
+#         server_name dashmin.bshomar.com www.dashmin.bshomar.com;
+# }
+
+# server {
+
+#         auth_basic "admin";
+#         auth_basic_user_file /etc/nginx/.htpasswd;
+
+#         server_name dashmin.bshomar.com www.dashmin.bshomar.com;
+
+#         client_max_body_size 30m;
+
+#         root /var/www/bshomar/prod/server/public;
+#         index index.php index.html;
+
+#         access_log /var/log/nginx/bshomar.dashmin.access.log;
+#         error_log /var/log/nginx/bshomar.dashmin.error.log;
+
+#         location / {
+#                 try_files $uri $uri/ /index.php?$query_string;
+#         }
+
+#         location ~ \.php$ {
+#             include snippets/fastcgi-php.conf;
+#       		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+#       		fastcgi_intercept_errors on;
+#         }
+
+#         location ~ /\.ht {
+#                 deny all;
+#         }
+
+#     listen [::]:443 ssl; # managed by Certbot
+#     listen 443 ssl; # managed by Certbot
+#     ssl_certificate /etc/letsencrypt/live/dashmin.bshomar.com/fullchain.pem; # managed by Certbot
+#     ssl_certificate_key /etc/letsencrypt/live/dashmin.bshomar.com/privkey.pem; # managed by Certbot
+#     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+#     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+# }

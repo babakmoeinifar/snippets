@@ -1,57 +1,16 @@
-# ---------------- STAGING ----------------
+
 server {
-    listen 80 default_server;
-    server_name dev.panel.bshomar.com www.dev.panel.bshomar.com;
+    server_name panel.bshomar.com www.panel.bshomar.com;
 
-    access_log /var/log/nginx/bshomar.dev.panel.access.log;
-    error_log /var/log/nginx/bshomar.dev.panel.error.log;
+    access_log /var/log/nginx/bshomar.panel.access.log;
+    error_log /var/log/nginx/bshomar.panel.error.log;
 
-    location /_next/ {
-        alias /var/www/bshomar/dev/bAdmin/.next/;
-        expires 30d;
-        access_log on;
-    }
+    root /var/www/panel/dist;
+    index index.html;
 
     location / {
-        # reverse proxy for next server
-        proxy_pass http://localhost:3003;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        
-        # we need to remove this 404 handling
-        # because next's _next folder and own handling
-        # try_files $uri $uri/ =404;
+             try_files $uri $uri/ /index.php?$query_string;
+             gzip_static on;
     }
+
 }
-
-# ---------------- PRODUCTION ----------------
-# server {
-#     listen 80 default_server;
-#     server_name panel.bshomar.com www.panel.bshomar.com;
-
-#    access_log /var/log/nginx/bshomar.panel.access.log;
-#    error_log /var/log/nginx/bshomar.panel.error.log;
-
-#     location /_next/ {
-#         alias /var/www/bshomar/prod/bAdmin/.next/;
-#         expires 30d;
-#         access_log on;
-#     }
-
-#     location / {
-#         # reverse proxy for next server
-#         proxy_pass http://localhost:3002;
-#         proxy_http_version 1.1;
-#         proxy_set_header Upgrade $http_upgrade;
-#         proxy_set_header Connection 'upgrade';
-#         proxy_set_header Host $host;
-#         proxy_cache_bypass $http_upgrade;
-        
-#         # we need to remove this 404 handling
-#         # because next's _next folder and own handling
-#         # try_files $uri $uri/ =404;
-#     }
-# }

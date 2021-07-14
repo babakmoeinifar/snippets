@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd /var/www/front/;
+git reset --hard && git clean -df;
+git pull;
+yarn install;
+yarn build;
+pm2 restart site;
+
+exec bash

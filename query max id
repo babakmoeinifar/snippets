@@ -1,0 +1,42 @@
+use App\Models\UsersEnum;
+Route::get('aaa', function (){
+    $configValues = \App\Models\UserConfig::whereIn('id', function ($query) {
+        $query->select(\DB::raw('MAX(id)'))
+            ->from('config_values')
+            ->where('config_key', 'salary-in-basalam-wallet')
+            ->groupBy('user_id');
+    })
+        ->get();
+    foreach ($configValues as $item){
+        $params = [
+            'created_by' => $item->created_by
+        ];
+        UsersEnum::create([
+            'user_id' => $item->user_id,
+            'enum_id' => 65,
+            'enum_value' => 'CREDIT',
+            'value' => $item->value,
+            'params' => json_encode($params),
+        ]);
+    }
+    $configValues = \App\Models\UserConfig::whereIn('id', function ($query) {
+        $query->select(\DB::raw('MAX(id)'))
+            ->from('config_values')
+            ->where('config_key', 'charity-monthly-amount')
+            ->groupBy('user_id');
+    })
+        ->get();
+    foreach ($configValues as $item){
+        $params = [
+            'created_by' => $item->created_by
+        ];
+        UsersEnum::create([
+            'user_id' => $item->user_id,
+            'enum_id' => 64,
+            'enum_value' => 'CHARITY',
+            'value' => $item->value,
+            'params' => json_encode($params),
+        ]);
+    }
+    return 'done!';
+});
